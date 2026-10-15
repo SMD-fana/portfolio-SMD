@@ -9,18 +9,10 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg:       #0a0a0a;
-    --surface:  #111111;
-    --border:   #1e1e1e;
-    --muted:    #3a3a3a;
-    --text:     #e8e4dc;
-    --sub:      #888;
-    --accent:   #c8f060;
-    --accent2:  #60c8f0;
-    --ff-head:  'Syne', sans-serif;
-    --ff-serif: 'Instrument Serif', serif;
-    --ff-mono:  'DM Mono', monospace;
-    --ease:     cubic-bezier(.16,1,.3,1);
+    --bg:#0a0a0a; --surface:#111111; --border:#1e1e1e; --muted:#3a3a3a; --text:#e8e4dc; --sub:#888;
+    --accent:#c8f060; --accent2:#60c8f0;
+    --ff-head:'Syne',sans-serif; --ff-serif:'Instrument Serif',serif; --ff-mono:'DM Mono',monospace;
+    --ease:cubic-bezier(.16,1,.3,1);
   }
   html { scroll-behavior: smooth; }
   body { background:var(--bg);color:var(--text);font-family:var(--ff-head);font-size:16px;line-height:1.6;overflow-x:hidden;cursor:none; }
@@ -87,6 +79,8 @@
   .about-text p { color:#999;line-height:1.9;margin-bottom:1.2rem;font-size:.97rem; }
   .about-text p strong { color:var(--text); }
   .about-text .highlight-box { border-left:2px solid var(--accent);padding:.8rem 1.2rem;background:rgba(200,240,96,.04);border-radius:0 8px 8px 0;margin:1.5rem 0;font-style:italic;font-family:var(--ff-serif);font-size:1.05rem;color:var(--text); }
+  .skills-title { font-family:var(--ff-mono);font-size:.72rem;color:var(--sub);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem; }
+  .skills-title.spaced { margin-top:2rem; }
   .skills-grid { display:grid;grid-template-columns:1fr 1fr;gap:.6rem; }
   .skill-tag { display:flex;align-items:center;gap:.6rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.65rem 1rem;font-size:.8rem;font-family:var(--ff-mono);transition:border-color .2s,transform .2s var(--ease); }
   .skill-tag:hover { border-color:var(--accent);transform:translateX(4px); }
@@ -96,8 +90,8 @@
   #projects { padding:8rem 3rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border); }
   .projects-inner { max-width:1200px;margin:0 auto; }
   .projects-list { display:grid;gap:1.5rem;margin-top:1rem; }
-  .project-card { background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:2.2rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;transition:border-color .25s,transform .3s var(--ease),box-shadow .3s;cursor:pointer;position:relative;overflow:hidden; }
-  .project-card::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,240,96,.03) 0%,transparent 60%);opacity:0;transition:opacity .3s; }
+  .project-card { background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:2.2rem;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:start;transition:border-color .25s,transform .3s var(--ease),box-shadow .3s;position:relative;overflow:hidden; }
+  .project-card::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,240,96,.03) 0%,transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none; }
   .project-card:hover { border-color:rgba(200,240,96,.3);transform:translateY(-4px);box-shadow:0 20px 48px rgba(0,0,0,.4); }
   .project-card:hover::before { opacity:1; }
   .project-num { font-family:var(--ff-mono);font-size:.7rem;color:var(--sub);margin-bottom:.5rem; }
@@ -110,6 +104,7 @@
   .icon-btn { width:40px;height:40px;border-radius:8px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--sub);font-size:.72rem;font-family:var(--ff-mono);font-weight:700;transition:background .2s,color .2s,border-color .2s; }
   .icon-btn:hover { background:var(--accent);color:var(--bg);border-color:var(--accent); }
   .featured-badge { display:inline-flex;align-items:center;gap:.4rem;font-family:var(--ff-mono);font-size:.65rem;color:var(--bg);background:var(--accent);padding:.2rem .6rem;border-radius:4px;text-transform:uppercase;letter-spacing:.1em;position:absolute;top:1.2rem;right:1.2rem; }
+  .project-card.featured .project-links { margin-top:2rem; }
 
   /* EXPERIENCE */
   #experience { padding:8rem 3rem;max-width:1200px;margin:0 auto; }
@@ -173,19 +168,35 @@
   #toast { position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--accent);color:var(--bg);padding:.8rem 1.4rem;border-radius:8px;font-family:var(--ff-mono);font-size:.8rem;font-weight:700;transform:translateY(80px);opacity:0;transition:all .4s var(--ease); }
   #toast.show { transform:translateY(0);opacity:1; }
 
+  /* Touch devices: restore the normal cursor, hide the custom one */
+  @media (hover:none), (pointer:coarse) {
+    body { cursor:auto; }
+    #cursor, #cursor-ring { display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    .reveal, .timeline-item { opacity:1; transform:none; }
+  }
+
   @media(max-width:768px){
     nav { padding:1rem 1.5rem; }
-    .nav-links { display:none; }
-    #hero { padding:8rem 1.5rem 3rem; }
+    .nav-links { display:flex;gap:1.2rem;position:absolute;top:100%;left:0;right:0;padding:.8rem 1.5rem;overflow-x:auto;background:rgba(10,10,10,.95);border-bottom:1px solid var(--border); }
+    .nav-links a { white-space:nowrap; }
+    .nav-cta { display:none; }
+    #hero { padding:9rem 1.5rem 3rem; }
     .hero-grid { grid-template-columns:1fr;gap:2.5rem; }
     #about,#experience,#education { padding:5rem 1.5rem; }
     #projects,#contact { padding:5rem 1.5rem; }
     .about-grid { grid-template-columns:1fr;gap:3rem; }
     .skills-grid { grid-template-columns:1fr; }
     .form-row { grid-template-columns:1fr; }
-    .edu-card { flex-direction:column; }
-    .edu-gpa { text-align:left; }
-    .edu-gpa span { text-align:left; }
+    .project-card { grid-template-columns:1fr; }
+    .project-links { flex-direction:row;align-items:flex-start; }
+    .project-card.featured .project-links { margin-top:0; }
+    .featured-badge { position:static;margin-bottom:1rem; }
+    .edu-card { flex-direction:column;align-items:flex-start; }
+    .edu-gpa, .edu-gpa span { text-align:left; }
     footer { flex-direction:column;gap:.5rem;text-align:center; }
   }
 </style>
@@ -211,29 +222,29 @@
 <section id="hero">
   <div class="hero-grid">
     <div>
-      <div class="hero-badge">Open to opportunities · 2026 Graduate</div>
+      <div class="hero-badge">Embedded Engineer @ ZAS Robotics · 2026 Graduate</div>
       <h1 class="hero-name">Shaik<br>Mohammed<br><em>Owais</em></h1>
-      <p class="hero-title">// Full-Stack Developer &amp; Web3 Builder</p>
-      <p class="hero-desc">I build full-stack web applications and decentralised systems. From MERN-stack products to Move smart contracts on Aptos — I love turning ideas into working software.</p>
+      <p class="hero-title">// Embedded, Full-Stack &amp; Web3 Developer</p>
+      <p class="hero-desc">I build embedded systems, full-stack web apps and decentralised software. From a lane-following car running a CNN on a Raspberry Pi to Move smart contracts on Aptos — I love turning ideas into working things.</p>
       <div class="hero-actions">
         <a href="#projects" class="btn-primary"><span>↓</span> View My Work</a>
-        <a href="https://github.com/SMD111-git" target="_blank" class="btn-ghost">GitHub →</a>
+        <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="btn-ghost">GitHub →</a>
       </div>
     </div>
     <div class="hero-visual">
       <div class="hero-card">
         <div class="code-snippet">
-          <span class="cm">// full-stack &amp; web3 developer</span><br>
+          <span class="cm">// full-stack, web3 &amp; embedded developer</span><br>
           <span class="kw">const</span> owais = {<br>
           &nbsp;&nbsp;name: <span class="str">'Shaik Mohammed Owais'</span>,<br>
           &nbsp;&nbsp;stack: [<span class="str">'React'</span>, <span class="str">'Node'</span>, <span class="str">'MongoDB'</span>],<br>
           &nbsp;&nbsp;web3: <span class="str">'Aptos (Move) + IPFS'</span>,<br>
-          &nbsp;&nbsp;graduating: <span class="num">2026</span>,<br>
+          &nbsp;&nbsp;hardware: <span class="str">'Pi · ESP32 · OpenCV'</span>,<br>
+          &nbsp;&nbsp;graduated: <span class="num">2026</span>,<br>
           &nbsp;&nbsp;status: <span class="fn">() =&gt;</span> {<br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">'actively seeking roles'</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">'building at ZAS Robotics'</span><br>
           &nbsp;&nbsp;}<br>
-          }<br><br>
-       
+          }
         </div>
         <div class="stat-row">
           <div class="stat-cell"><span class="val" id="c1">0</span><span class="lbl">Projects</span></div>
@@ -249,8 +260,8 @@
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <span>React.js</span><span class="accent">✦</span><span>Node.js</span><span class="accent">✦</span><span>Express</span><span class="accent">✦</span><span>MongoDB</span><span class="accent">✦</span><span>MySQL</span><span class="accent">✦</span><span>TypeScript</span><span class="accent">✦</span><span>JavaScript</span><span class="accent">✦</span><span>Java</span><span class="accent">✦</span><span>Python</span><span class="accent">✦</span><span>Aptos Move</span><span class="accent">✦</span><span>IPFS</span><span class="accent">✦</span><span>Git &amp; GitHub</span><span class="accent">✦</span>
-    <span>React.js</span><span class="accent">✦</span><span>Node.js</span><span class="accent">✦</span><span>Express</span><span class="accent">✦</span><span>MongoDB</span><span class="accent">✦</span><span>MySQL</span><span class="accent">✦</span><span>TypeScript</span><span class="accent">✦</span><span>JavaScript</span><span class="accent">✦</span><span>Java</span><span class="accent">✦</span><span>Python</span><span class="accent">✦</span><span>Aptos Move</span><span class="accent">✦</span><span>IPFS</span><span class="accent">✦</span><span>Git &amp; GitHub</span><span class="accent">✦</span>
+    <span>React.js</span><span class="accent">✦</span><span>Node.js</span><span class="accent">✦</span><span>Express</span><span class="accent">✦</span><span>MongoDB</span><span class="accent">✦</span><span>MySQL</span><span class="accent">✦</span><span>TypeScript</span><span class="accent">✦</span><span>JavaScript</span><span class="accent">✦</span><span>Java</span><span class="accent">✦</span><span>Python</span><span class="accent">✦</span><span>Aptos Move</span><span class="accent">✦</span><span>IPFS</span><span class="accent">✦</span><span>ESP32</span><span class="accent">✦</span><span>ROS2</span><span class="accent">✦</span><span>OpenCV</span><span class="accent">✦</span><span>Raspberry Pi</span><span class="accent">✦</span><span>Git &amp; GitHub</span><span class="accent">✦</span>
+    <span>React.js</span><span class="accent">✦</span><span>Node.js</span><span class="accent">✦</span><span>Express</span><span class="accent">✦</span><span>MongoDB</span><span class="accent">✦</span><span>MySQL</span><span class="accent">✦</span><span>TypeScript</span><span class="accent">✦</span><span>JavaScript</span><span class="accent">✦</span><span>Java</span><span class="accent">✦</span><span>Python</span><span class="accent">✦</span><span>Aptos Move</span><span class="accent">✦</span><span>IPFS</span><span class="accent">✦</span><span>ESP32</span><span class="accent">✦</span><span>ROS2</span><span class="accent">✦</span><span>OpenCV</span><span class="accent">✦</span><span>Raspberry Pi</span><span class="accent">✦</span><span>Git &amp; GitHub</span><span class="accent">✦</span>
   </div>
 </div>
 
@@ -260,26 +271,58 @@
   <h2 class="section-heading reveal">Who I <span>Am</span></h2>
   <div class="about-grid">
     <div class="about-text reveal">
-      <p>Hey — I'm Owais, a <strong>final-year Computer Science student</strong> at MITS University (graduating Apr 2026) with a deep passion for full-stack development and decentralised applications.</p>
+      <p>Hey, I'm Owais, a <strong>Computer Science and Engineering graduate</strong> from MITS University Madanapalle (May 2026). I'm now working at <strong>ZAS Robotics</strong> in Bangalore on embedded systems and computer vision, with a deep passion for full-stack development and decentralised applications.</p>
       <div class="highlight-box">"I don't just learn technologies — I build things with them, from security tools to Web3 DApps."</div>
-      <p>My journey spans <strong>MERN-stack web apps</strong>, real-time backends, open-source collaboration, and most recently <strong>Move smart contracts on Aptos blockchain</strong> with IPFS-based storage.</p>
+      <p>My journey spans <strong>MERN-stack web apps</strong>, real-time backends, open-source collaboration, <strong>Move smart contracts on Aptos blockchain</strong> with IPFS-based storage, and hands-on <strong>robotics and embedded work</strong> with Raspberry Pi, OpenCV, ESP32 and Arduino.</p>
       <p>I served as <strong>Student Coordinator of the College Coding Club</strong>, organising workshops, coding contests, and hackathon prep sessions — because I believe community makes better engineers.</p>
     </div>
     <div class="reveal">
-      <div style="font-family:var(--ff-mono);font-size:.72rem;color:var(--sub);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1rem;">Technical Skills</div>
+      <div class="skills-title">Languages</div>
       <div class="skills-grid">
-        <div class="skill-tag"><span class="dot"></span>React.js</div>
+        <div class="skill-tag"><span class="dot"></span>Java</div>
+        <div class="skill-tag"><span class="dot"></span>Python</div>
+        <div class="skill-tag"><span class="dot"></span>SQL (Postgres)</div>
+        <div class="skill-tag"><span class="dot"></span>JavaScript</div>
+        <div class="skill-tag"><span class="dot"></span>TypeScript</div>
+        <div class="skill-tag"><span class="dot"></span>HTML / CSS</div>
+      </div>
+      <div class="skills-title spaced">Frameworks &amp; Libraries</div>
+      <div class="skills-grid">
+        <div class="skill-tag"><span class="dot"></span>React</div>
         <div class="skill-tag"><span class="dot"></span>Node.js</div>
         <div class="skill-tag"><span class="dot"></span>Express.js</div>
         <div class="skill-tag"><span class="dot"></span>MongoDB</div>
-        <div class="skill-tag"><span class="dot"></span>MySQL</div>
-        <div class="skill-tag"><span class="dot"></span>JavaScript</div>
-        <div class="skill-tag"><span class="dot"></span>TypeScript</div>
-        <div class="skill-tag"><span class="dot"></span>Java</div>
-        <div class="skill-tag"><span class="dot"></span>Python</div>
-        <div class="skill-tag"><span class="dot"></span>Aptos Move</div>
+        <div class="skill-tag"><span class="dot"></span>FastAPI</div>
+        <div class="skill-tag"><span class="dot"></span>Flask</div>
+        <div class="skill-tag"><span class="dot"></span>FastMCP</div>
+        <div class="skill-tag"><span class="dot"></span>OpenCV</div>
+        <div class="skill-tag"><span class="dot"></span>CNN models</div>
+        <div class="skill-tag"><span class="dot"></span>scikit-learn</div>
+        <div class="skill-tag"><span class="dot"></span>NumPy · Pandas</div>
+        <div class="skill-tag"><span class="dot"></span>Matplotlib</div>
         <div class="skill-tag"><span class="dot"></span>Redux Toolkit</div>
+        <div class="skill-tag"><span class="dot"></span>Aptos Move</div>
+      </div>
+      <div class="skills-title spaced">Hardware</div>
+      <div class="skills-grid">
+        <div class="skill-tag"><span class="dot"></span>Raspberry Pi</div>
+        <div class="skill-tag"><span class="dot"></span>Arduino Uno / Nano</div>
+        <div class="skill-tag"><span class="dot"></span>ESP32</div>
+        <div class="skill-tag"><span class="dot"></span>Motors &amp; drivers</div>
+        <div class="skill-tag"><span class="dot"></span>Camera · LiDAR</div>
+        <div class="skill-tag"><span class="dot"></span>I2C · SPI · UART · PWM</div>
+        <div class="skill-tag"><span class="dot"></span>PID &amp; Motor Control</div>
+        <div class="skill-tag"><span class="dot"></span>ROS2</div>
+      </div>
+      <div class="skills-title spaced">Developer Tools</div>
+      <div class="skills-grid">
         <div class="skill-tag"><span class="dot"></span>Git &amp; GitHub</div>
+        <div class="skill-tag"><span class="dot"></span>Docker</div>
+        <div class="skill-tag"><span class="dot"></span>AWS</div>
+        <div class="skill-tag"><span class="dot"></span>VS Code</div>
+        <div class="skill-tag"><span class="dot"></span>Jupyter Notebook</div>
+        <div class="skill-tag"><span class="dot"></span>SSH</div>
+        <div class="skill-tag"><span class="dot"></span>Linux</div>
       </div>
     </div>
   </div>
@@ -292,82 +335,90 @@
     <h2 class="section-heading reveal">Projects I've <span>Built</span></h2>
     <div class="projects-list">
 
-      <div class="project-card reveal">
+      <div class="project-card featured reveal">
         <span class="featured-badge">★ Featured</span>
         <div>
           <div class="project-num">01</div>
-          <div class="project-name">Skill Passport DPP (NFT Web3)</div>
-          <div class="project-desc">A decentralised skill-verification DApp on Aptos blockchain using Move smart contracts to issue NFT-based credentials. Features wallet authentication, role-based access control, and IPFS-based certificate storage with a React + TypeScript frontend.</div>
-          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Aptos Move</span><span class="tech-tag">IPFS</span><span class="tech-tag">Smart Contracts</span></div>
+          <div class="project-name">car4 — Lane-Following Car</div>
+          <div class="project-desc">A self-driving car built from scratch around a Raspberry Pi 3B+, OV5647 camera, TB6612FNG motor driver, two DC gear motors and a custom PCB. I collected and labelled the data, preprocessed it, trained a custom CNN and deployed it on the car to follow two lanes.</div>
+          <div class="tech-tags"><span class="tech-tag">Raspberry Pi</span><span class="tech-tag">OpenCV</span><span class="tech-tag">CNN</span><span class="tech-tag">Python</span><span class="tech-tag">Flask</span><span class="tech-tag">Custom PCB</span><span class="tech-tag">Linux · SSH</span></div>
         </div>
         <div class="project-links">
-          <a href="https://github.com/SMD111-git" target="_blank" class="icon-btn">GH</a>
-          <a href="#" class="icon-btn">↗</a>
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
         </div>
       </div>
 
-      <div class="project-card reveal">
+      <div class="project-card featured reveal">
+        <span class="featured-badge">★ Featured</span>
         <div>
           <div class="project-num">02</div>
-          <div class="project-name">Email Spoofing Analyzer</div>
-          <div class="project-desc">A MERN-based web application that analyses security data and maps it to MITRE ATT&amp;CK tactics and techniques, helping security teams understand attacker behaviour in a structured, visual format.</div>
-          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">MITRE ATT&CK</span></div>
+          <div class="project-name">Skill Passport DPP (NFT Web3)</div>
+          <div class="project-desc">A decentralised skill-verification DApp on the Aptos blockchain. Move smart contracts issue tamper-proof NFT skill badges with on-chain metadata and event logging. Includes Petra/Martian wallet authentication, admin workflows for credential issuance and access control, and IPFS-based certificate storage, with a React + TypeScript frontend.</div>
+          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">TypeScript</span><span class="tech-tag">Aptos Move</span><span class="tech-tag">IPFS</span><span class="tech-tag">Petra / Martian</span><span class="tech-tag">Smart Contracts</span></div>
         </div>
         <div class="project-links">
-          <a href="https://github.com/SMD111-git" target="_blank" class="icon-btn">GH</a>
-          <a href="#" class="icon-btn">↗</a>
+          <!-- Replace REPO-NAME with the real repository name -->
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
         </div>
       </div>
 
       <div class="project-card reveal">
         <div>
           <div class="project-num">03</div>
-          <div class="project-name">Video Platform Backend</div>
-          <div class="project-desc">A production-grade RESTful backend built with Node.js and Express, implementing JWT authentication, bcrypt password hashing, video uploads via Multer, and complete APIs for likes, comments, and subscriptions with MongoDB schemas.</div>
-          <div class="tech-tags"><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">JWT</span><span class="tech-tag">Multer</span></div>
+          <div class="project-name">Email Spoofing Analyzer</div>
+          <div class="project-desc">A MERN-based web application that analyses security data and maps it to MITRE ATT&amp;CK tactics and techniques, helping security teams understand attacker behaviour in a structured, visual format.</div>
+          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">MITRE ATT&amp;CK</span></div>
         </div>
         <div class="project-links">
-          <a href="https://github.com/SMD111-git" target="_blank" class="icon-btn">GH</a>
-          <a href="#" class="icon-btn">↗</a>
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
         </div>
       </div>
 
       <div class="project-card reveal">
         <div>
           <div class="project-num">04</div>
-          <div class="project-name">URL Shortener</div>
-          <div class="project-desc">A full-stack URL shortener using the MERN stack. Generates, stores, and redirects shortened links with input validation and collision handling. Clean, minimal UI with instant redirect.</div>
-          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span></div>
+          <div class="project-name">Video Platform Backend</div>
+          <div class="project-desc">A production-grade RESTful backend built with Node.js and Express, implementing JWT authentication, bcrypt password hashing, video uploads via Multer, and complete APIs for likes, comments, and subscriptions with MongoDB schemas.</div>
+          <div class="tech-tags"><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">JWT</span><span class="tech-tag">Multer</span></div>
         </div>
         <div class="project-links">
-          <a href="https://github.com/SMD111-git" target="_blank" class="icon-btn">GH</a>
-          <a href="#" class="icon-btn">↗</a>
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
         </div>
       </div>
 
       <div class="project-card reveal">
         <div>
           <div class="project-num">05</div>
-          <div class="project-name">Todo App (Redux Toolkit)</div>
-          <div class="project-desc">A scalable Todo application using React and Redux Toolkit, featuring centralised state management and full CRUD operations with predictable UI updates. Clean architecture with Redux slices and selectors.</div>
-          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">Redux Toolkit</span><span class="tech-tag">JavaScript</span></div>
+          <div class="project-name">URL Shortener</div>
+          <div class="project-desc">A full-stack URL shortener using the MERN stack. Generates, stores, and redirects shortened links with input validation and collision handling. Clean, minimal UI with instant redirect.</div>
+          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">Node.js</span><span class="tech-tag">Express.js</span><span class="tech-tag">MongoDB</span></div>
         </div>
         <div class="project-links">
-          <a href="https://github.com/SMD111-git" target="_blank" class="icon-btn">GH</a>
-          <a href="#" class="icon-btn">↗</a>
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
         </div>
       </div>
 
       <div class="project-card reveal">
         <div>
           <div class="project-num">06</div>
+          <div class="project-name">Todo App (Redux Toolkit)</div>
+          <div class="project-desc">A scalable Todo application using React and Redux Toolkit, featuring centralised state management and full CRUD operations with predictable UI updates. Clean architecture with Redux slices and selectors.</div>
+          <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">Redux Toolkit</span><span class="tech-tag">JavaScript</span></div>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div>
+          <div class="project-num">07</div>
           <div class="project-name">Tic-Tac-Toe (Ticateo)</div>
           <div class="project-desc">A browser-based Tic-Tac-Toe game in React with win/draw detection, turn management, and responsive state handling using React Hooks. Clean, intuitive UI with instant game-state feedback.</div>
           <div class="tech-tags"><span class="tech-tag">React.js</span><span class="tech-tag">JavaScript</span><span class="tech-tag">React Hooks</span></div>
         </div>
         <div class="project-links">
-          <a href="https://github.com/SMD111-git" target="_blank" class="icon-btn">GH</a>
-          <a href="#" class="icon-btn">↗</a>
+          <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">GH</a>
         </div>
       </div>
 
@@ -380,6 +431,18 @@
   <div class="section-label">Experience</div>
   <h2 class="section-heading reveal">Where I've <span>Contributed</span></h2>
   <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="exp-meta"><span class="exp-period">Jul 2026 — Present</span><span class="exp-badge">Full-time</span></div>
+      <div class="exp-role">Embedded Systems &amp; Product Development</div>
+      <div class="exp-company">ZAS Robotics · Bangalore, India</div>
+      <ul class="exp-desc">
+        <li>Developing car4, an embedded self-driving car product using OpenCV, Raspberry Pi 3B+, motors and motor drivers.</li>
+        <li>Built the lane-following pipeline from scratch: collected and labelled camera data, preprocessed it, trained a custom CNN and deployed it on the car.</li>
+        <li>Run hands-on workshops for end users on Arduino Uno/Nano, ESP32 and Raspberry Pi.</li>
+        <li>Support the startup on the business side: managing clients, helping with fundraising and handling educational tenders.</li>
+      </ul>
+    </div>
 
     <div class="timeline-item">
       <div class="exp-meta"><span class="exp-period">Feb 2025 — Aug 2025</span><span class="exp-badge">Leadership</span></div>
@@ -406,41 +469,61 @@
   </div>
 </section>
 
-
+<!-- EDUCATION -->
+<section id="education">
+  <div class="education-inner">
+    <div class="section-label">Education</div>
+    <h2 class="section-heading reveal">Where I <span>Studied</span></h2>
+    <div class="edu-card reveal">
+      <div>
+        <div class="edu-degree">Bachelor of Computer Science and Engineering</div>
+        <div class="edu-school">MITS University Madanapalle</div>
+        <div class="edu-meta">Oct 2022 — May 2026</div>
+      </div>
+      <div class="edu-gpa">7.33<span>CGPA</span></div>
+    </div>
+  </div>
+</section>
 
 <!-- CONTACT -->
 <section id="contact">
   <div class="contact-inner">
     <div class="section-label" style="justify-content:center;">Contact</div>
     <h2 class="contact-heading reveal">Let's Build Something <em>Together</em></h2>
-    <p class="contact-sub reveal">I'm actively looking for full-time roles and internships. If you have an opportunity, a project, or just want to connect — I reply to every message.</p>
+    <p class="contact-sub reveal">I'm open to collaborations, robotics and web projects, and good conversations. If you have an idea or an opportunity, send a message — I reply to every one.</p>
+    <!-- To send real messages, use Formspree or Web3Forms:
+         add action="https://formspree.io/f/YOUR_ID" method="POST", add name="" to each field, and remove onsubmit. -->
     <form class="contact-form reveal" id="contactForm" onsubmit="handleSubmit(event)">
       <div class="form-row">
-        <div class="form-group"><label>Your Name</label><input type="text" placeholder="Jane Smith" required></div>
-        <div class="form-group"><label>Email</label><input type="email" placeholder="jane@company.com" required></div>
+        <div class="form-group"><label for="f-name">Your Name</label><input id="f-name" name="name" type="text" placeholder="Jane Smith" required></div>
+        <div class="form-group"><label for="f-email">Email</label><input id="f-email" name="email" type="email" placeholder="jane@company.com" required></div>
       </div>
       <div class="form-group">
-        <label>Subject</label>
-        <select><option>Job Opportunity</option><option>Internship</option><option>Freelance / Project</option><option>Open Source Collab</option><option>Just Saying Hi</option></select>
+        <label for="f-subject">Subject</label>
+        <select id="f-subject" name="subject"><option>Job Opportunity</option><option>Internship</option><option>Workshop / Training</option><option>Freelance / Project</option><option>Open Source Collab</option><option>Just Saying Hi</option></select>
       </div>
-      <div class="form-group"><label>Message</label><textarea placeholder="Tell me about the role or project..."></textarea></div>
+      <div class="form-group"><label for="f-msg">Message</label><textarea id="f-msg" name="message" placeholder="Tell me about the role or project..."></textarea></div>
       <button type="submit" class="submit-btn">Send Message →</button>
     </form>
     <div class="contact-links reveal">
-      <a href="https://github.com/SMD111-git" target="_blank" class="contact-link">⌥ GitHub</a>
-      <a href="https://www.linkedin.com/in/smd-owais-7703b7245/" target="_blank" class="contact-link">in LinkedIn</a>
+      <a href="https://github.com/SMD111-git" target="_blank" rel="noopener" class="contact-link">⌥ GitHub</a>
+      <a href="https://www.linkedin.com/in/smd-owais-7703b7245/" target="_blank" rel="noopener" class="contact-link">in LinkedIn</a>
+      <a href="https://x.com/SMD9987" target="_blank" rel="noopener" class="contact-link">𝕏 Twitter</a>
+      <a href="https://smd99.hashnode.dev/" target="_blank" rel="noopener" class="contact-link">✎ Blog</a>
+      <a href="https://drive.google.com/file/d/1ri0hMNk8W8uCfjFhYh_bi9ltqy5SqaSY/view?usp=sharing" target="_blank" rel="noopener" class="contact-link">⇩ Resume</a>
       <a href="mailto:owaissmd33@gmail.com" class="contact-link">✉ Email</a>
-      
     </div>
   </div>
 </section>
 
 <footer>
-  <span>© 2025 Shaik Mohammed Owais · All rights reserved.</span>
+  <span>© <span id="yr">2026</span> Shaik Mohammed Owais · All rights reserved.</span>
   <span>owaissmd33@gmail.com</span>
 </footer>
 
 <script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
 const cursor=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
@@ -467,8 +550,8 @@ const heroObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
     if(e.isIntersecting&&!countersRan){
       countersRan=true;
-      animateCount(document.getElementById('c1'),6,'+',1600,false);
-      animateCount(document.getElementById('c2'),12,'+',1800,false);
+      animateCount(document.getElementById('c1'),7,'+',1600,false);
+      animateCount(document.getElementById('c2'),25,'+',1800,false);
       animateCount(document.getElementById('c3'),7.33,'',1800,true);
     }
   });
